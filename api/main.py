@@ -83,12 +83,13 @@ async def transcribe(file: UploadFile, authorization: str = Header(None)):
     connection_string = os.getenv("database_url")
     connection = psycopg2.connect(connection_string)
     cursor = connection.cursor()
-    cursor.execute("INSERT INTO transcriptions (filename, transcription) VALUES (%s, %s);", (temp_file_path, result['text']))
+    cursor.execute("INSERT INTO transcripts (filename, transcript) VALUES (%s, %s) RETURNING id;", (file.filename, result['text']))
+    id = cursor.fetchone()[0]
     connection.commit()
     cursor.close()
     connection.close()
 
-    return { "result": "Saved new entry to database." }
+    return { "result": f'Transcribed audio file successfully. Access it at https://modal-roan.vercel.app/{id}.' }
 
 @stub.function(image=app_image, secret=Secret.from_name("unkey_api_key"))
 @asgi_app()

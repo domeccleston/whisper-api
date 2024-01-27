@@ -10,15 +10,17 @@ def main(filename, transcript):
     cursor = connection.cursor()
     
     # Correctly format the SQL query with string values
-    cursor.execute("INSERT INTO transcriptions (filename, transcription) VALUES (%s, %s);", (filename, transcript))
+    cursor.execute("INSERT INTO transcripts (filename, transcript) VALUES (%s, %s) RETURNING id;", (filename, transcript))
     
-    # As this is an INSERT operation, there's no need to fetch a record
+    # Fetch the returned id
+    inserted_id = cursor.fetchone()[0]
+
     connection.commit()
     cursor.close()
     connection.close()
 
     # Since we're not fetching anything, we can't print the first podcast here
-    print(f"Inserted podcast with filename: {filename}")
+    print(f"Inserted podcast with ID: {inserted_id}")
 
 
-main("test_podcast_2", "Hello, world")
+main("test_podcast_4", "some test podcast text")

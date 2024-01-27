@@ -5,6 +5,8 @@ import { eq } from "drizzle-orm";
 import { transcripts } from "@/lib/schema";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 async function getTranscript({ id }: { id: number }) {
 	const result = await db
 		.select({ transcript: transcripts.transcript })
