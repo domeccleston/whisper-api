@@ -21,7 +21,7 @@ app_image = (
         "yt-dlp",
         "unkey.py",
         "python-dotenv",
-        "psycopg2-binary"
+        "psycopg2-binary",
     )
     .apt_install("ffmpeg")
     .pip_install("ffmpeg-python")
